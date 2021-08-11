@@ -1,0 +1,88 @@
+#include <iostream>
+#include <ctime>
+#include <cstdlib>
+
+#define random(a,b) (rand()%(b-a+1)+a)
+
+using namespace std;
+
+struct Link {
+    int data;
+    Link* next;
+};
+
+Link* InitLink(Link*, int);
+void ShootP(Link*);
+void Display(Link*);
+
+int main()
+{
+    int n;
+    cout << "参加者数を入力してください:" << endl;
+    cin >> n;
+    Link* head = NULL;
+    head = InitLink(head, n);
+    ShootP(head);
+
+    system("PAUSE");
+    return 0;
+}
+
+Link* InitLink(Link* head, int n) {
+    head = new Link;
+    head->data = 1;
+    head->next = NULL;
+
+    Link* temp = head;
+    for (int i = 2; i <= n; ++i) {
+        Link* list = new Link;
+        list->data = i;
+        list->next = NULL;
+
+        temp->next = list;
+        temp = temp->next;
+    }
+    temp->next = head;
+
+    return head;
+}
+
+void ShootP(Link* head) {
+    Link* temp = head;
+    srand((int)time(0));
+
+    while (temp->next != head) {
+        temp = temp->next;
+    }
+
+    while (temp->next != temp) {
+        int num = random(1, 6);
+        cout << "次は" << num << "発目を打つと，biubiubiu" << endl;
+        while(--num) {
+            temp = temp->next;
+        }
+        cout << "No：" << temp->next->data << "射殺された" << endl;
+        Link* temp2 = temp->next;
+        temp->next = temp->next->next;
+        cout << "残り人数：" << endl;
+        if (temp2 == head)
+            head = head->next;
+        Display(head);
+        /*error point  Display(head)
+        改変
+        */
+    }
+    cout << "No：" << temp->data << "生きる" << endl;
+}
+
+void Display(Link* head) {
+    Link* temp = head;
+    if (temp) {
+        while (temp->next != head) {
+            cout << temp->data << "->";
+            temp = temp->next;
+        }
+    }
+    cout << temp->data;
+    cout << endl;
+}
